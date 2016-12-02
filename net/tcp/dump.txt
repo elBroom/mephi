@@ -1,0 +1,17 @@
+10:48:13.386414 IP 127.0.0.1.34502 > 127.0.0.1.5000: Flags [S], seq 297030269, win 43690, options [mss 65495,sackOK,TS val 46913301 ecr 0,nop,wscale 7], length 0
+10:48:13.386469 IP 127.0.0.1.5000 > 127.0.0.1.34502: Flags [S.], seq 2100214691, ack 297030270, win 43690, options [mss 65495,sackOK,TS val 46913301 ecr 46913301,nop,wscale 7], length 0
+10:48:13.386529 IP 127.0.0.1.34502 > 127.0.0.1.5000: Flags [.], ack 1, win 342, options [nop,nop,TS val 46913301 ecr 46913301], length 0
+10:48:24.442710 IP 127.0.0.1.34502 > 127.0.0.1.5000: Flags [P.], seq 1:13, ack 1, win 342, options [nop,nop,TS val 46916065 ecr 46913301], length 12
+10:48:24.442966 IP 127.0.0.1.5000 > 127.0.0.1.34502: Flags [.], ack 13, win 342, options [nop,nop,TS val 46916066 ecr 46916065], length 0
+10:48:24.443053 IP 127.0.0.1.5000 > 127.0.0.1.34502: Flags [P.], seq 1:13, ack 13, win 342, options [nop,nop,TS val 46916066 ecr 46916065], length 12
+10:48:24.443237 IP 127.0.0.1.34502 > 127.0.0.1.5000: Flags [.], ack 13, win 342, options [nop,nop,TS val 46916066 ecr 46916066], length 0
+10:48:36.023893 IP 127.0.0.1.34502 > 127.0.0.1.5000: Flags [P.], seq 13:24, ack 13, win 342, options [nop,nop,TS val 46918961 ecr 46916066], length 11
+10:48:36.024161 IP 127.0.0.1.5000 > 127.0.0.1.34502: Flags [P.], seq 13:24, ack 24, win 342, options [nop,nop,TS val 46918961 ecr 46918961], length 11
+10:48:36.024361 IP 127.0.0.1.34502 > 127.0.0.1.5000: Flags [.], ack 24, win 342, options [nop,nop,TS val 46918961 ecr 46918961], length 0
+10:48:40.844134 IP 127.0.0.1.34502 > 127.0.0.1.5000: Flags [P.], seq 24:26, ack 24, win 342, options [nop,nop,TS val 46920166 ecr 46918961], length 2
+10:48:40.844327 IP 127.0.0.1.5000 > 127.0.0.1.34502: Flags [P.], seq 24:26, ack 26, win 342, options [nop,nop,TS val 46920166 ecr 46920166], length 2
+10:48:40.844465 IP 127.0.0.1.34502 > 127.0.0.1.5000: Flags [.], ack 26, win 342, options [nop,nop,TS val 46920166 ecr 46920166], length 0
+10:48:42.212219 IP 127.0.0.1.34502 > 127.0.0.1.5000: Flags [F.], seq 26, ack 26, win 342, options [nop,nop,TS val 46920508 ecr 46920166], length 0
+10:48:42.214996 IP 127.0.0.1.5000 > 127.0.0.1.34502: Flags [F.], seq 26, ack 27, win 342, options [nop,nop,TS val 46920509 ecr 46920508], length 0
+10:48:42.215098 IP 127.0.0.1.34502 > 127.0.0.1.5000: Flags [.], ack 27, win 342, options [nop,nop,TS val 46920509 ecr 46920509], length 0
+
