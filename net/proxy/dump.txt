@@ -1,0 +1,29 @@
+15:53:13.987615 IP 127.0.0.1.35467 > 127.0.0.1.5000: Flags [S], seq 2649168388, win 43690, options [mss 65495,sackOK,TS val 51488452 ecr 0,nop,wscale 7], length 0
+15:53:13.987663 IP 127.0.0.1.5000 > 127.0.0.1.35467: Flags [S.], seq 3339589148, ack 2649168389, win 43690, options [mss 65495,sackOK,TS val 51488452 ecr 51488452,nop,wscale 7], length 0
+15:53:13.987715 IP 127.0.0.1.35467 > 127.0.0.1.5000: Flags [.], ack 1, win 342, options [nop,nop,TS val 51488452 ecr 51488452], length 0
+15:53:13.991703 IP 127.0.0.1.35807 > 127.0.0.1.5443: Flags [S], seq 462342904, win 43690, options [mss 65495,sackOK,TS val 51488453 ecr 0,nop,wscale 7], length 0
+15:53:13.991758 IP 127.0.0.1.5443 > 127.0.0.1.35807: Flags [S.], seq 1776399062, ack 462342905, win 43690, options [mss 65495,sackOK,TS val 51488453 ecr 51488453,nop,wscale 7], length 0
+15:53:13.991814 IP 127.0.0.1.35807 > 127.0.0.1.5443: Flags [.], ack 1, win 342, options [nop,nop,TS val 51488453 ecr 51488453], length 0
+15:53:13.992240 IP 127.0.0.1.35807 > 127.0.0.1.5443: Flags [P.], seq 1:518, ack 1, win 342, options [nop,nop,TS val 51488453 ecr 51488453], length 517
+15:53:13.992347 IP 127.0.0.1.5443 > 127.0.0.1.35807: Flags [.], ack 518, win 350, options [nop,nop,TS val 51488453 ecr 51488453], length 0
+15:53:13.992673 IP 127.0.0.1.5443 > 127.0.0.1.35807: Flags [P.], seq 1:645, ack 518, win 350, options [nop,nop,TS val 51488453 ecr 51488453], length 644
+15:53:13.992853 IP 127.0.0.1.35807 > 127.0.0.1.5443: Flags [.], ack 645, win 352, options [nop,nop,TS val 51488453 ecr 51488453], length 0
+15:53:13.995192 IP 127.0.0.1.35807 > 127.0.0.1.5443: Flags [P.], seq 518:708, ack 645, win 352, options [nop,nop,TS val 51488454 ecr 51488453], length 190
+15:53:14.004850 IP 127.0.0.1.5443 > 127.0.0.1.35807: Flags [P.], seq 645:871, ack 708, win 359, options [nop,nop,TS val 51488456 ecr 51488454], length 226
+15:53:14.042956 IP 127.0.0.1.35807 > 127.0.0.1.5443: Flags [.], ack 871, win 362, options [nop,nop,TS val 51488466 ecr 51488456], length 0
+15:53:27.735731 IP 127.0.0.1.35467 > 127.0.0.1.5000: Flags [P.], seq 1:13, ack 1, win 342, options [nop,nop,TS val 51491889 ecr 51488452], length 12
+15:53:27.736041 IP 127.0.0.1.5000 > 127.0.0.1.35467: Flags [.], ack 13, win 342, options [nop,nop,TS val 51491889 ecr 51491889], length 0
+15:53:27.836633 IP 127.0.0.1.35807 > 127.0.0.1.5443: Flags [P.], seq 708:749, ack 871, win 362, options [nop,nop,TS val 51491914 ecr 51488456], length 41
+15:53:27.874954 IP 127.0.0.1.5443 > 127.0.0.1.35807: Flags [.], ack 749, win 359, options [nop,nop,TS val 51491924 ecr 51491914], length 0
+15:53:32.555984 IP 127.0.0.1.5443 > 127.0.0.1.35807: Flags [P.], seq 871:903, ack 749, win 359, options [nop,nop,TS val 51493094 ecr 51491914], length 32
+15:53:32.556208 IP 127.0.0.1.35807 > 127.0.0.1.5443: Flags [.], ack 903, win 362, options [nop,nop,TS val 51493094 ecr 51493094], length 0
+15:53:32.656914 IP 127.0.0.1.5000 > 127.0.0.1.35467: Flags [P.], seq 1:4, ack 13, win 342, options [nop,nop,TS val 51493119 ecr 51491889], length 3
+15:53:32.657051 IP 127.0.0.1.35467 > 127.0.0.1.5000: Flags [.], ack 4, win 342, options [nop,nop,TS val 51493119 ecr 51493119], length 0
+15:53:32.657146 IP 127.0.0.1.5000 > 127.0.0.1.35467: Flags [F.], seq 4, ack 13, win 342, options [nop,nop,TS val 51493119 ecr 51493119], length 0
+15:53:32.657417 IP 127.0.0.1.35807 > 127.0.0.1.5443: Flags [F.], seq 749, ack 903, win 362, options [nop,nop,TS val 51493119 ecr 51493094], length 0
+15:53:32.658294 IP 127.0.0.1.5443 > 127.0.0.1.35807: Flags [P.], seq 903:934, ack 750, win 359, options [nop,nop,TS val 51493119 ecr 51493119], length 31
+15:53:32.658435 IP 127.0.0.1.35807 > 127.0.0.1.5443: Flags [R], seq 462343654, win 0, length 0
+15:53:32.694949 IP 127.0.0.1.35467 > 127.0.0.1.5000: Flags [.], ack 5, win 342, options [nop,nop,TS val 51493129 ecr 51493119], length 0
+15:53:41.150327 IP 127.0.0.1.35467 > 127.0.0.1.5000: Flags [F.], seq 13, ack 5, win 342, options [nop,nop,TS val 51495242 ecr 51493119], length 0
+15:53:41.150479 IP 127.0.0.1.5000 > 127.0.0.1.35467: Flags [.], ack 14, win 342, options [nop,nop,TS val 51495242 ecr 51495242], length 0
+
