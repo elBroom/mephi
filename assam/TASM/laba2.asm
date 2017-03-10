@@ -2,12 +2,15 @@
 .model small
 .data
     a dd 1D7h ; 111010111b
-    WORD_SIZE equ 32d
     result db 0 ; 5 5h
     padding db 0 ; 23d 17h 
     len db 0 ;9h len/2=4h
     lhead db ?
     ltail db ?
+
+.const
+    WORD_SIZE equ 32d
+
 .code
 .486
     mov ax, @data
@@ -24,8 +27,9 @@ skip: ; calculate padding
     jnc skip
 
     dec padding
-    shr eax, 1
-    add eax, 80000000h ; return one to number
+    add eax, 1
+    ; cycle shift right
+    ror eax, 1 ; return one to number
     mov ebx, eax ; save tail
 
 ; calculate length number
@@ -38,12 +42,12 @@ skip: ; calculate padding
 
 calc: ; start loop
     mov lhead, 0
-    shr edx, 1
-    jnc checkTail
+    shr edx, 1 ; get first symbol
+    jnc getTail
     mov lhead, 1 ; save first symbol
-checkTail:
+getTail:
     mov ltail, 0
-    shl ebx, 1
+    shl ebx, 1 ; get last symbol
     jnc compare
     mov ltail, 1 ; save last symbol
 compare: ; compare last and first symbols

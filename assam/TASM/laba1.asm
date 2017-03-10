@@ -1,12 +1,16 @@
 ;f=((a+b)(2c-d^2))/(4(a+e))
+;6*3 / 20
+;+3ac = 18
 .model small
 .data
-    a dw 1
+    a dw 1 ;1
     b dw 5
     c dw 6
     d dw 3
-    e dw 4
+    e dw 4 ;4
     r dd ?
+    o dd ?
+    buf dd ?
 
 .code
 .486
@@ -18,11 +22,9 @@
     mov ax, a
     mov cx, e
     add ax, cx ; ax=(a+e)
-    mov bx, ax ; bx=(a+e)
-    sal ebx, 2 ; ebx=4(a+e)
-    cmp ebx, 0
+    sal eax, 2 ; ebx=4(a+e)
     jz exit
-    mov r, ebx ; r=4(a+e)
+    mov r, eax ; r=4(a+e)
 
     xor ecx, ecx ; ecx=0
     mov cx, c
@@ -47,6 +49,24 @@
     xor ebx, ebx ; ebx=0
     mov ebx, r
     idiv ebx
+    mov r, eax
+    mov o, edx
+
+    xor eax, eax ; ebx=0
+    xor ebx, ebx ; ebx=0
+    mov ax, a ; ax=a
+    mov bx, c ; bx=c
+    imul bx ; dx:ax=ac
+
+    xor ebx, ebx ; ebx=0
+    mov bx, dx
+    sal bx, 16
+    mov bx, ax ; ebx=ac
+
+    mov buf, ebx
+    shl ebx, 1 ; ebx=2ac
+    add ebx, buf ; ebx=3ac
+    add ebx, r ; ax=r+3ac
     mov r, ebx
 
 exit:
