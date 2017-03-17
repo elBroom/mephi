@@ -1,8 +1,8 @@
 
  Start  Stop   Length Name               Class
 
- 00000H 00034H 00035H _TEXT              CODE
- 00036H 0003AH 00005H _DATA              DATA
+ 00000H 00059H 0005AH _TEXT              CODE
+ 0005AH 00060H 00007H _DATA              DATA
 
   Address         Publics by Name
 
