@@ -1,19 +1,18 @@
-;array[N][N], change collumns with min and max elements
+;array[N][N], change rows with min and max elements
 ;result in var array, change N
 .model small
 .data
     N db 4
-    array dw  -1,  -8,  -9,  21
-          dw   2,  16,  -3,  21
-          dw  13,   2,  -2,  -6
+    array dw  -1,  -8,  -9,   0
+          dw   2,  16,  -3,   1
+          dw  13,   2,  -2,  21
           dw  -2,   0,  -6,   0
     len dw 2 ;length word = 2byte
     count dw 0
     min dw ?
     max dw ?
     minInd dw ? ;2
-    maxInd dw ? ;3
-    step dw ?
+    maxInd dw ? ;11
 .stack 256
 .code
     mov ax, @data
@@ -46,13 +45,7 @@ iterArr: ; calculate min and max
         add si, len
         loop iterArr
 
-    ;calculate step
-    xor ax, ax ; eax=0
-    mov al, N
-    mov step, ax
-    shl step, 1 ;word
-
-    ;calculate index min column 
+    ;calculate index min row 
     xor ax, ax ; ax=0
     xor bx, bx ; bx=0
     xor dx, dx ; dx=0
@@ -61,11 +54,12 @@ iterArr: ; calculate min and max
     mov ax, minInd
     mov bl, N
     cwd
-    div bx ;dx=mod division by byte ax:dx
-    mov bp, dx
-    shl bp, 1 ;word
+    div bx ;ax ax:dx
+    shl bx, 1 ; N * word
+    mul bx ; N * word * minRow
+    mov bp, ax
 
-    ;calculate index max column 
+    ;calculate index max row 
     xor ax, ax ; ax=0
     xor bx, bx ; bx=0
     xor dx, dx ; dx=0
@@ -73,9 +67,10 @@ iterArr: ; calculate min and max
     mov ax, maxInd
     mov bl, N
     cwd
-    div bx ;dx=mod division by byte ax:dx
-    mov bx, dx
-    shl bx, 1 ;word
+    div bx ;ax ax:dx
+    shl bx, 1 ; N * word
+    mul bx ; N * word * maxRow
+    mov bx, ax
 
     cmp bp, bx
     jz exit
@@ -87,7 +82,7 @@ changeArr: ; fill cells
         xchg ax, array[si+bx]
         xchg ax, ds:array[si+bp]
         xchg ax, array[si+bx]
-        add si, step
+        add si, len
         loop changeArr
 exit:
     mov ax, 4c00h
