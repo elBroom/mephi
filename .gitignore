@@ -7,3 +7,8 @@ os/
 pravo/
 programming/
 реферат_Сайфуллина З.Р._Б14-В74.pdf
+
+assam/TASM/*.EXE
+assam/TASM/*.MAP
+assam/TASM/*.OBJ
+*/.~lock*
