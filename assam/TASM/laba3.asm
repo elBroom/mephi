@@ -1,10 +1,12 @@
 ;array[N][N], replace (max if elem >= 0 else min)
+;result in var array, change N
 .model small
 .data
-    N db 3
-    array dw 3,2,1
-          dw -4,-5,-6
-          dw 9,8,7
+    N db 4
+    array dw -1,-8,-9,21
+          dw 2,16,-3,21
+          dw 13,2,-2,-6
+          dw -2,0,-6,0
     len dw 2 ;length word = 2byte
     count dw 0
     min dw ?
@@ -55,6 +57,6 @@ fillArr: ; fill cells
         add si, len
         loop fillArr
 
-    mov ah, 4ch
+    mov ax, 4c00h
     int 21h
 end
