@@ -11,8 +11,8 @@
     count dw 0
     min dw ?
     max dw ?
-.stack 256
 .code
+.486
     mov ax, @data
     mov ds, ax
     xor ax, ax
