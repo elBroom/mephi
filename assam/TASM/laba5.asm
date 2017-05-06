@@ -4,38 +4,50 @@
 .model small
 .stack 256
 .data
-    input db 1000 dup('$')
-    output db 1000 dup('$')
-    filename db 32 dup('$')
-
-    ; choose
-    choose_menu1 db 1
-    choose_menu2 db 1
-    choose_menu3 db 1
-
     ;helper
     in_text db 'Enter text: ', 13, 10, '$'
-    in_file db 'Enter filename input:', 13, 10, '$'
-    out_file db 'Enter filename output:', 13, 10, '$'
+    
+    file_in db 'Enter filename input:', 13, 10, '$'
+    file_load db 'File loaded', 13, 10, '$'
+    file_err_permission db 'Permission denied', 13, 10, '$'
+    file_err_not_found db 'Error file not found', 13, 10, '$'
+    file_err_open db 'Error open file', 13, 10, '$'
+    file_err_read db 'Error read file', 13, 10, '$'
+    
+    file_out db 'Enter filename output:', 13, 10, '$'
+    file_create db 'File created and writed', 13, 10, '$'
+    file_open db 'File opend and writed', 13, 10, '$'
+    file_err_oc db 'Error open or create file', 13, 10, '$'
+    file_err_write db 'Error write file', 13, 10, '$'
+
     res db 'Result: ', 13, 10, '$'
-    men1 db 'Enter task:',13, 10, '$'
-    men2 db 'Enter input mode:',13, 10, '$'
-    men3 db 'Enter output mode:',13, 10, '$'
-    men4 db 'Continue:',13, 10, '$'
-    itm1 db 'exit',13, 10, '$'
-    itm2 db 'previos menu',13, 10, '$'
-    itm3 db 'console',13, 10, '$'
-    itm4 db 'file',13, 10, '$'
-    itm5 db 'base',13, 10, '$'
-    itm6 db 'additionally',13, 10, '$'
-    itm7 db 'continue',13, 10, '$'
+    men1 db 'Enter task:', 13, 10, '$'
+    men2 db 'Enter input mode:', 13, 10, '$'
+    men3 db 'Enter output mode:', 13, 10, '$'
+    men4 db 'Continue:', 13, 10, '$'
+    itm1 db 'exit', 13, 10, '$'
+    itm2 db 'previos menu', 13, 10, '$'
+    itm3 db 'console', 13, 10, '$'
+    itm4 db 'file', 13, 10, '$'
+    itm5 db 'base', 13, 10, '$'
+    itm6 db 'additionally', 13, 10, '$'
+    itm7 db 'continue', 13, 10, '$'
     num0 db '0 - $'
     num1 db '1 - $'
     num2 db '2 - $'
     num3 db '3 - $'
     incorrect db 'incorrect answer', 13, 10, '$'
     bye db 'bye', 13, 10, '$'
-    CRLF    db  13,10,'$'
+    CRLF    db  13, 10,'$'
+
+    input db 300 dup('$')
+    output db 300 dup('$')
+    filename db 36 dup('$')
+
+    ; choose
+    choose_menu1 db 1
+    choose_menu2 db 1
+    choose_menu3 db 1
 
     buf dw 0
 .code
@@ -65,6 +77,8 @@ p_menu2:
 ; input
     cmp choose_menu2, '1'
     jnz p_file_input
+    mov dx, 1
+    push dx
     push offset in_text
     push offset input
     call console_input
@@ -104,6 +118,8 @@ exit:
 base proc near
     pusha
     pushf
+        xor dx, dx
+        mov buf, 0
 
         lea si, input ; source
         lea di, output ; distination
@@ -171,11 +187,13 @@ base  endp
 additionally proc near
     pusha
     pushf
+        xor dx, dx
+        mov buf, 0
 
-    lea si, input ; source
-    lea di, output ; distination
-    add si, 2
-    dec si
+        lea si, input ; source
+        lea di, output ; distination
+        add si, 2
+        dec si
 
     a_findWord:
         inc si
@@ -455,6 +473,7 @@ concat_count proc near
 concat_count  endp
 
 ;get string from keyboard
+;from stack head: str_addr, helper, end
 console_input proc near
     pusha
     mov dx, [esp + 16 + 4]
@@ -465,26 +484,39 @@ console_input proc near
     mov ah,0ah
     int 21h
 
+
     xor bx, bx
     mov di, [esp + 16 + 2]
     mov bl, [di + 1]
+
+    xor cx, cx
+    mov cl, 1
+    cmp [esp + 16 + 6], cl
+    jnz ci_zero
     mov byte ptr [di + bx + 2], 13
     mov byte ptr [di + bx + 4], 10
     mov byte ptr [di + bx + 6], '$'
+    jmp ci_print
 
-    mov dx, [esp + 16 + 2]
-    add dx, 2
-    mov ah, 9
-    int 21h
+    ci_zero:
+        mov byte ptr [di + bx + 2], 0
 
-    lea dx, CRLF
-    mov ah, 9
-    int 21h
+    ci_print:
+        mov dx, [esp + 16 + 2]
+        add dx, 2
+        mov ah, 9
+        int 21h
 
-    popa
-    ret 4
+        lea dx, CRLF
+        mov ah, 9
+        int 21h
+
+        popa
+        ret 6
 console_input endp
 
+; print string to console
+;from stack head: str_addr
 print_string proc near
     pusha
 
@@ -508,18 +540,184 @@ console_output proc near
 console_output endp
 
 file_input proc near
-    push offset in_file
+    pusha
+
+    mov dx, 2
+    push dx
+    push offset file_in
     push offset filename
     call console_input
 
-    push offset in_text
-    push offset input
-    call console_input
+    mov ah, 3Dh
+    mov al, 0 ; open attribute: 0 - read-only, 1 - write-only, 2 -read&amp;write
+    lea dx, filename ; ASCIIZ filename to open
+    add dx, 2
+    int 21h
+    jc rf_open_error
+    
+    mov bx, ax ; handle we get when opening a file
+    mov ah, 03Fh       
+    mov cx, 0FFFFh ; number of bytes to read
+    lea dx, input ; were to put read data
+    int 21h
+    jc rf_read_error
+    
+    mov ah, 03Eh ; close file, bx - handle
+    int 21h
+    
+    xor ebx, ebx
+    lea bx, input
+    mov dl, '$'
+    mov [ebx + eax], dl
+    
+    push offset file_load
+    call print_string
+    jmp rf_return
+    
+    rf_open_error:
+        cmp ax, 2
+        jz rf_not_found
+        cmp ax, 3
+        jz rf_not_found
+        cmp ax, 5
+        jz rf_perm_den
 
-    ret
+        push offset file_err_open
+        call print_string
+        jmp rf_return
+    rf_not_found:
+        push offset file_err_not_found
+        call print_string
+        jmp rf_return
+    rf_perm_den:
+        push offset file_err_permission
+        call print_string
+        jmp rf_return
+    rf_read_error:
+        push offset file_err_read
+        call print_string
+        jmp rf_return
+
+    rf_return:
+        popa
+        ret
 file_input endp
 
+;from stack head: str_addr, filename
 file_output proc near
+    pusha
+    mov dx, 2
+    push dx
+    push offset file_out
+    push offset filename
+    call console_input
+
+    mov buf, 1
+    
+    wf_open:
+        mov ah, 3Dh
+        mov al, 1 ; open attribute: 0 - read-only, 1 - write-only, 2 -read&write
+        lea dx, filename ; ASCIIZ filename to open
+        add dx, 2
+        int 21h
+        jc wf_create
+        jmp wf_write
+
+    wf_write:
+        mov ecx, 1
+        xor ebx, ebx
+        lea bx, output
+        wf_length_loop:
+            mov dl, [ebx]
+            cmp dl, '$'
+            je wf_write_go
+            inc ecx
+            inc ebx
+            jmp wf_length_loop
+        
+        wf_write_go:
+            dec ecx
+            mov bx, ax ; handle we get when opening a file
+            mov ah, 40h
+            lea dx, output ; data to write
+            int 21h
+            jc wf_write_error
+            
+            mov ah, 3Eh ; close file, bx - handle
+            int 21h
+            jmp wf_status
+
+    wf_create:
+        mov buf, 0
+        mov ah, 3Ch ; DOS create file
+        mov cx, 0 ; attribute
+        lea dx, filename ; filename in ASCIIZ
+        add dx, 2
+        int 21h
+        jc wf_oc_error
+        jmp wf_open
+    
+    wf_delete:
+        mov bx, ax
+        mov ah, 3Eh ; close file, bx - handle
+        int 21h
+        mov ah, 41h ; delete file
+        lea dx, filename ; ASCIIZ filename to delete
+        add dx, 2
+        int 21h
+        jmp wf_create
+        
+    wf_oc_error:
+        cmp ax, 3
+        jz wf_not_found
+        cmp ax, 4
+        jz wf_perm_den
+
+        push offset file_err_oc
+        call print_string
+        jmp wf_exit
+    wf_not_found:
+        push offset file_err_not_found
+        call print_string
+        jmp wf_exit
+    wf_perm_den:
+        push offset file_err_permission
+        call print_string
+        jmp wf_exit
+    wf_write_error:
+        mov buf, 3
+        jmp wf_status
+
+    wf_status:
+        cmp buf, 0
+        jz wf_status_create
+        cmp buf, 1
+        jz wf_status_open
+        cmp buf, 2
+        jz wf_status_err_oc
+        cmp buf, 3
+        jz wf_status_err_write
+        jmp wf_exit
+
+    wf_status_create:
+        push offset file_create
+        call print_string
+        jmp wf_exit
+    wf_status_open:
+        push offset file_open
+        call print_string
+        jmp wf_exit
+    wf_status_err_oc:
+        push offset file_err_oc
+        call print_string
+        jmp wf_exit
+    wf_status_err_write:
+        push offset file_err_write
+        call print_string
+        jmp wf_exit
+    wf_exit:
+
+    popa
     ret
 file_output endp
 
