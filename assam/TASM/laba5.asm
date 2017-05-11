@@ -42,9 +42,9 @@
     bye db 'bye', 13, 10, '$'
     CRLF    db  13, 10,'$'
 
-    input db 300 dup('$')
-    output db 300 dup('$')
-    filename db 36 dup('$')
+    input dw 254 dup(255)
+    output dw 254 dup(255)
+    filename db 36 dup(37)
 
     ; choose
     choose_menu1 db 1
@@ -205,7 +205,7 @@ additionally proc near
         lea si, input ; source
         lea di, output ; distination
         dec si
-        
+
         cmp choose_menu2, '1'
         jnz a_findWord
         add si, 2
