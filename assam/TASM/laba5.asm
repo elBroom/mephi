@@ -1,6 +1,7 @@
 ;Построить вещественное число, целая часть которого есть длина первого слова строки;
 ;каждая цифра в дробной части является длиной очередного слова строки.
 ;len(first word),len(second word)len(third word)...len(last word)
+;http://www.avprog.narod.ru/progs/fdos01.html
 .model small
 .stack 256
 .data
@@ -11,6 +12,7 @@
     file_load db 'File loaded', 13, 10, '$'
     file_err_permission db 'Permission denied', 13, 10, '$'
     file_err_not_found db 'Error file not found', 13, 10, '$'
+    file_err_not_found_path db 'Error path not found', 13, 10, '$'
     file_err_open db 'Error open file', 13, 10, '$'
     file_err_read db 'Error read file', 13, 10, '$'
     
@@ -85,7 +87,8 @@ p_menu2:
     jmp p_make_task
 p_file_input:
     call file_input
-
+    cmp buf, 1 ;check error
+    jz p_menu4
 
 ; make task
 p_make_task:
@@ -123,8 +126,11 @@ base proc near
 
         lea si, input ; source
         lea di, output ; distination
-        add si, 2
         dec si
+
+        cmp choose_menu2, '1'
+        jnz b_findWord
+        add si, 2
 
     b_findWord:
         inc si
@@ -164,10 +170,16 @@ base proc near
         mov al, 10
         cmp al, [di-1]
         jnz b_endLine
+
+    b_setZero:
         mov al, '0'
         stosb ; add end line
 
     b_endLine:
+        mov al, '$'
+        cmp al, [di-1]
+        jz b_setZero
+
         mov al, 13
         stosb ; add end line
         mov al, 10
@@ -192,8 +204,11 @@ additionally proc near
 
         lea si, input ; source
         lea di, output ; distination
-        add si, 2
         dec si
+        
+        cmp choose_menu2, '1'
+        jnz a_findWord
+        add si, 2
 
     a_findWord:
         inc si
@@ -231,6 +246,11 @@ additionally proc near
         jmp a_findWord
 
     a_exit:
+        mov al, 13
+        stosb ; add end line
+        mov al, 10
+        stosb ; add end line
+        mov al, '$'
         stosb ; add EOF
 
     popf
@@ -490,9 +510,9 @@ console_input proc near
     mov bl, [di + 1]
 
     xor cx, cx
-    mov cl, 1
+    mov cl, 0
     cmp [esp + 16 + 6], cl
-    jnz ci_zero
+    jz ci_zero
     mov byte ptr [di + bx + 2], 13
     mov byte ptr [di + bx + 4], 10
     mov byte ptr [di + bx + 6], '$'
@@ -511,8 +531,8 @@ console_input proc near
         mov ah, 9
         int 21h
 
-        popa
-        ret 6
+    popa
+    ret 6
 console_input endp
 
 ; print string to console
@@ -533,8 +553,6 @@ console_output proc near
     call print_string
     push offset output
     call print_string
-    push offset CRLF
-    call print_string
 
     ret
 console_output endp
@@ -542,7 +560,8 @@ console_output endp
 file_input proc near
     pusha
 
-    mov dx, 2
+    mov buf, 0
+    mov dx, dx
     push dx
     push offset file_in
     push offset filename
@@ -575,10 +594,11 @@ file_input proc near
     jmp rf_return
     
     rf_open_error:
+        mov buf, 1
         cmp ax, 2
         jz rf_not_found
         cmp ax, 3
-        jz rf_not_found
+        jz rf_not_found_path
         cmp ax, 5
         jz rf_perm_den
 
@@ -589,11 +609,16 @@ file_input proc near
         push offset file_err_not_found
         call print_string
         jmp rf_return
+    rf_not_found_path:
+        push offset file_err_not_found_path
+        call print_string
+        jmp rf_return
     rf_perm_den:
         push offset file_err_permission
         call print_string
         jmp rf_return
     rf_read_error:
+        mov buf, 1
         push offset file_err_read
         call print_string
         jmp rf_return
@@ -606,7 +631,7 @@ file_input endp
 ;from stack head: str_addr, filename
 file_output proc near
     pusha
-    mov dx, 2
+    mov dx, dx
     push dx
     push offset file_out
     push offset filename
@@ -677,7 +702,7 @@ file_output proc near
         call print_string
         jmp wf_exit
     wf_not_found:
-        push offset file_err_not_found
+        push offset file_err_not_found_path
         call print_string
         jmp wf_exit
     wf_perm_den:
