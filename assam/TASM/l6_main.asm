@@ -9,8 +9,8 @@
     choose_menu2 db 1
     choose_menu3 db 1
 
-    input db 300 dup('$')
-    output db 300 dup('$')
+    input db 254 dup(255)
+    output db 254 dup(255)
 
     buf dw 0
 .code

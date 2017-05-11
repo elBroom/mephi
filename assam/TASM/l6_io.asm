@@ -18,7 +18,7 @@
     file_err_oc db 'Error open or create file', 13, 10, '$'
     file_err_write db 'Error write file', 13, 10, '$'
 
-    filename db 36 dup('$')
+    filename db 36 dup(37)
 
     buf dw 0
 .code
