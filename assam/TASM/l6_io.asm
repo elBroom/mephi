@@ -1,7 +1,7 @@
 .model small
 .stack 256
 .data
-    res db 'Result: ', 13, 10, '$'
+    res db 'Result:                                                           ', 13, 10, '$'
     CRLF    db  13, 10,'$'
 
     file_in db 'Enter filename input:', 13, 10, '$'
@@ -57,16 +57,16 @@ console_input proc near
 
     ci_zero:
         mov byte ptr [di + bx + 2], 0
+        jmp ci_exit
 
     ci_print:
-        mov dx, [esp + 16 + 2]
-        add dx, 2
-        mov ah, 9
-        int 21h
+        ; xor dx, dx
+        ; mov dx, [esp + 16 + 2]
+        ; add dx, 1
+        ; mov ah, 9
+        ; int 21h
 
-        lea dx, CRLF
-        mov ah, 9
-        int 21h
+    ci_exit:
 
     popa
     ret 6
@@ -94,7 +94,7 @@ file_input proc near
     pusha
 
     mov buf, 0
-    mov cx, cx
+    xor cx, cx
     push cx
     push offset file_in
     push offset filename
@@ -168,7 +168,7 @@ public file_output
 ;from stack head: output
 file_output proc near
     pusha
-    mov cx, cx
+    xor cx, cx
     push cx
     push offset file_out
     push offset filename
