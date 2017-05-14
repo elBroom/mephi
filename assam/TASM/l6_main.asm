@@ -9,8 +9,9 @@
     choose_menu2 db 1
     choose_menu3 db 1
 
-    input db 254 dup(255)
-    output db 254 dup(255)
+    input db 254 dup(254, '$')
+    output db 130 dup('$')
+    filename db 36 dup('$')
 
     buf dw 0
 .code
@@ -55,15 +56,6 @@ p_menu2:
     cmp choose_menu2, '3'
     jz p_menu1
 
-    call menu3
-    mov choose_menu3, dl
-    cmp choose_menu3, '0'
-    jz exit
-
-    cmp choose_menu3, '3'
-    jz p_menu2
-
-
 ; input
     cmp choose_menu2, '1'
     jnz p_file_input
@@ -92,11 +84,20 @@ p_make_task:
     jnz p_additionally
     call base
     jmp p_output
+
 p_additionally:
     call additionally
 
 ; output
 p_output:
+    call menu3
+    mov choose_menu3, dl
+    cmp choose_menu3, '0'
+    jz exit
+
+    cmp choose_menu3, '3'
+    jz p_menu2
+
     push offset output
 
     cmp choose_menu3, '1'

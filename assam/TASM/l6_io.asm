@@ -1,7 +1,7 @@
 .model small
 .stack 256
 .data
-    res db 'Result:                                                           ', 13, 10, '$'
+    res db 'Result: ', 13, 10, '$'
     CRLF    db  13, 10,'$'
 
     file_in db 'Enter filename input:', 13, 10, '$'
@@ -57,16 +57,12 @@ console_input proc near
 
     ci_zero:
         mov byte ptr [di + bx + 2], 0
-        jmp ci_exit
 
     ci_print:
-        ; xor dx, dx
-        ; mov dx, [esp + 16 + 2]
-        ; add dx, 1
-        ; mov ah, 9
-        ; int 21h
-
-    ci_exit:
+        xor dx, dx
+        lea dx, CRLF
+        mov ah, 9
+        int 21h
 
     popa
     ret 6
