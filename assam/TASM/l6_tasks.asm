@@ -108,7 +108,7 @@ additionally proc near
         dec si
 
         cmp cx, '1'
-        jnz b_findWord
+        jnz a_findWord
         add si, 2
 
     a_findWord:
